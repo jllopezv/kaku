@@ -1,0 +1,4 @@
+All entity tables must have uuid primary key
+
+$table->uuid('id')->primary();
+            
