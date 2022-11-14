@@ -18,8 +18,8 @@ class LopDatabase
 
     static public function addOwnerUser(Blueprint $table)
     {
-        $table->foreignUuid('created_by')->nullable()->references('id')->on('users');
-        $table->foreignUuid('updated_by')->nullable()->references('id')->on('users');
+        $table->foreignId('created_by')->nullable()->references('id')->on('users')->onDelete('set null');
+        $table->foreignId('updated_by')->nullable()->references('id')->on('users')->onDelete('set null');
     }
 
     static public function dropOwnerUser(Blueprint $table)

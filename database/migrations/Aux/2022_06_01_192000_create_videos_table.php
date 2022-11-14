@@ -1,9 +1,9 @@
 <?php
 
 use App\Lopsoft\LopDatabase;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -14,8 +14,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            LopDatabase::addActive($table);
+        Schema::create('videos', function (Blueprint $table) {
+            $table->id();
+            $table->string('video')->default('');
+            $table->string('path')->nullable();
+            $table->Morphs('videoable');
+            $table->timestamps();
             LopDatabase::addOwnerUser($table);
         });
     }
@@ -27,9 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            LopDatabase::dropActive($table);
-            LopDatabase::dropOwnerUser($table);
-        });
+        Schema::dropIfExists('videos');
     }
 };
