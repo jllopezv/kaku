@@ -44,7 +44,7 @@ class CurrencySeeder extends Seeder
         $record->save();
 
 
-        $current->setCurrent(); // this updates rates
+        //$current->setCurrent(); // this updates rates
     }
 
 }

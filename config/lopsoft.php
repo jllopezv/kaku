@@ -96,9 +96,7 @@ return [
     'avatar_max_size'       => 5120, // 5Mb
     'avatar_width'          => 300,
     'avatar_height'         => 300,
-    'ucAccess'              => true,        // Uppercase Access Models (users,roles)
-    'maxLevelAdmin'         => 10,          // Maximun level for admins ( between 1 and maxLevelAdmin both includes)
-    'maxlevelVIPUsers'      => 100,
+    'user_level'            => 100,         // Min user level
     'user_default_email_domain' =>  'lopsoft.com',
     'default_password'      => '123456789',
 
@@ -110,7 +108,7 @@ return [
     |
     */
 
-    'default_quota'         =>  '10Mb',        // 10Mb by default   (Kb,Mb,Gb)
+    'default_quota'         =>  10*1024*1024,        // 10Mb by default 
 
 
 

@@ -26,17 +26,17 @@ class DatabaseSeeder extends Seeder
     {
 
         // Aux
-        $this->call(ColorSeeder::class);
-        $this->call(CountrySeeder::class);
-        $this->call(TimezoneSeeder::class);
-        $this->call(LanguageSeeder::class);
-        $this->call(CurrencySeeder::class);
+        $this->call( ColorSeeder::class );
+        $this->call( CountrySeeder::class );
+        $this->call( TimezoneSeeder::class );
+        $this->call( LanguageSeeder::class );
+        $this->call( CurrencySeeder::class );
 
         //Auth
-        $this->call(PermissionGroupSeeder::class);
-        $this->call(PermissionSeeder::class);
-        $this->call(RoleSeeder::class);
-        $this->call(UserSeeder::class);
-        
+        $this->call( PermissionGroupSeeder::class );
+        $this->call( PermissionSeeder::class );
+        $this->call( RoleSeeder::class );
+        $this->call( UserSeeder::class );
+ 
     }
 }

@@ -1,0 +1,41 @@
+Roles will be like templates. Will be attributes like quota, level, quota_unlimited.
+Users can have many roles.
+User level will be minor of level roles since the smaller the better.
+User quota will be the mayor of quota roles since the bigger the better.
+Permissions can be asigned to roles or to users
+When permissions’s roles changes:
+
+   Decission:
+   User permissions could change, then 
+       Basic authorization should fall on roles or on permissions
+   User permissions could not change, then
+        Basic authorization should fall ONLY  on user permissions. Couse user permissions will remain intact.
+
+Methods:
+
+Role:
+
+setPermission(String $permission) : Role
+setPermissions(Array $permissions) : Role
+revokePermission( String $permission ) : Role
+revokePermissions( String $permissions ) : Role
+setQuota( $quota ) : Role
+getQuota( $quota ) : unsignedInt
+hasQuota() : bool // is unlimited?
+
+Permission:
+
+setGroup(String $group) : Permission
+assignToRole(String $role) : Permission
+revokeFromRole(String $role) : Permission
+
+User:
+
+assignPermission(String $permission) : User
+assignPermissions(Array $permissions) : User
+revokePermission(String $permission) : User
+revokePermissions(Array $permissions) : User
+assignRole(String $role) : User
+assignRoles(Array $roles) : User
+revokeRole(String $role) : User
+revokeRoles(Array $roles) : User

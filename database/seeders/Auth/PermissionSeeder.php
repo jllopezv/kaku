@@ -66,179 +66,109 @@ class PermissionSeeder extends Seeder
 
     public function createPermissions($table, $group)
     {
-        $record=new Permission;
-        $record->name="ACCEDER A LOS REGISTROS";
-        $record->slug=$table.'.access';
-        $record->description="PERMITE ACCEDER A LOS REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "ACCEDER A LOS REGISTROS",
+            'permission'    =>  $table.'.access',
+            'description'   =>  "PERMITE ACCEDER A LOS REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="LISTAR REGISTROS";
-        $record->slug=$table.'.index';
-        $record->description="PERMITE LISTAR LOS REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "LISTAR REGISTROS",
+            'permission'    =>  $table.'.index',
+            'description'   =>  "PERMITE LISTAR LOS REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="LISTAR REGISTROS DE OTROS USUARIOS";
-        $record->slug=$table.'.index.others';
-        $record->description="PERMITE LISTAR LOS REGISTROS DE OTROS USUARIOS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "LISTAR REGISTROS DE OTROS USUARIOS",
+            'permission'    =>  $table.'.index.others',
+            'description'   =>  "PERMITE LISTAR LOS REGISTROS DE OTROS USUARIOS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="CREAR REGISTROS";
-        $record->slug=$table.'.create';
-        $record->description="CREAR REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "CREAR REGISTROS",
+            'permission'    =>  $table.'.create',
+            'description'   =>  "CREAR REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="ELIMINAR REGISTROS";
-        $record->slug=$table.'.destroy';
-        $record->description="ELIMINAR REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "ELIMINAR REGISTROS",
+            'permission'    =>  $table.'.destroy',
+            'description'   =>  "ELIMINAR REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="ELIMINAR REGISTROS DE OTROS USUARIOS";
-        $record->slug=$table.'.destroy.others';
-        $record->description="ELIMINAR REGISTROS DE OTROS USUARIOS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "ELIMINAR REGISTROS DE OTROS USUARIOS",
+            'permission'    =>  $table.'.destroy.others',
+            'description'   =>  "ELIMINAR REGISTROS DE OTROS USUARIOS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="VER REGISTROS";
-        $record->slug=$table.'.show';
-        $record->description="PERMITE VER REGISTROS LOS REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "VER REGISTROS",
+            'permission'    =>  $table.'.show',
+            'description'   =>  "PERMITE VER REGISTROS LOS REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="VER REGISTROS DE OTROS USUARIOS";
-        $record->slug=$table.'.show.others';
-        $record->description="VER REGISTROS DE OTROS USUARIOS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "VER REGISTROS DE OTROS USUARIOS",
+            'permission'    =>  $table.'.show.others',
+            'description'   =>  "VER REGISTROS DE OTROS USUARIOS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="EDITAR REGISTROS";
-        $record->slug=$table.'.edit';
-        $record->description="PUEDE EDITAR REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "EDITAR REGISTROS",
+            'permission'    =>  $table.'.edit',
+            'description'   =>  "PUEDE EDITAR REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="EDITAR REGISTROS DE OTROS USUARIOS";
-        $record->slug=$table.'.edit.others';
-        $record->description="EDITAR REGISTROS DE OTROS USUARIOS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "EDITAR REGISTROS DE OTROS USUARIOS",
+            'permission'    =>  $table.'.edit.others',
+            'description'   =>  "EDITAR REGISTROS DE OTROS USUARIOS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="BLOQUEAR REGISTROS";
-        $record->slug=$table.'.lock';
-        $record->description="PUEDE BLOQUEAR REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "BLOQUEAR REGISTROS",
+            'permission'    =>  $table.'.lock',
+            'description'   =>  "PUEDE BLOQUEAR REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="BLOQUEAR REGISTROS DE OTROS USUARIOS";
-        $record->slug=$table.'.lock.others';
-        $record->description="BLOQUEAR REGISTROS DE OTROS USUARIOS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "BLOQUEAR REGISTROS DE OTROS USUARIOS",
+            'permission'    =>  $table.'.lock.others',
+            'description'   =>  "BLOQUEAR REGISTROS DE OTROS USUARIOS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="IMPRIMIR REGISTROS";
-        $record->slug=$table.'.print';
-        $record->description="PUEDE IMPRIMIR REGISTROS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "IMPRIMIR REGISTROS",
+            'permission'    =>  $table.'.print',
+            'description'   =>  "PUEDE IMPRIMIR REGISTROS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
-        $record=new Permission;
-        $record->name="IMPRIMIR REGISTROS DE OTROS USUARIOS";
-        $record->slug=$table.'.print.others';
-        $record->description="IMPRIMIR REGISTROS DE OTROS USUARIOS";
-        $record->group=$this->getGroupID($group);
-        $record->save();
-        /*$record->allowedActions()->create([  'allowShow'     => false,
-                                            'allowEdit'     => false,
-                                            'allowDelete'   => false,
-                                            'allowLock'     => false
-                                        ]);*/
+        Permission::create([
+            'name'          =>  "IMPRIMIR REGISTROS DE OTROS USUARIOS",
+            'permission'    =>  $table.'.print.others',
+            'description'   =>  "IMPRIMIR REGISTROS DE OTROS USUARIOS",
+            'group_id'         =>  $this->getGroupID($group),
+        ]);
 
     }
 
     public function getGroupID($group)
     {
         $groupid=PermissionGroup::where('group',$group)->first();
-        return $groupid->id;
+        return $groupid?->id;
     }
 }

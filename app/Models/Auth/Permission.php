@@ -8,6 +8,7 @@ use App\Models\Traits\HasActive;
 use App\Models\Traits\IsAuditable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Permission extends Model
 {
@@ -21,45 +22,8 @@ class Permission extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'slug', 'description', 'group'
+        'name', 'slug', 'description', 'group_id'
     ];
-
-
-    public static function boot()
-    {
-        parent::boot();
-        static::created(function($model){
-            $roles=Role::all();
-            foreach($roles as $role)
-            {
-                Cache::forget('role'.$role->id.'.permissions');
-            }
-        });
-
-        static::deleted(function($model){
-            $roles=Role::all();
-            foreach($roles as $role)
-            {
-                Cache::forget('role'.$role->id.'.permissions');
-            }
-        });
-
-        static::updated(function($model){
-            $roles=Role::all();
-            foreach($roles as $role)
-            {
-                Cache::forget('role'.$role->id.'.permissions');
-            }
-        });
-
-        static::saved(function($model){
-            $roles=Role::all();
-            foreach($roles as $role)
-            {
-                Cache::forget('role'.$role->id.'.permissions');
-            }
-        });
-    }
 
     /*******************************************/
     /* Relationships
@@ -70,9 +34,9 @@ class Permission extends Model
      *
      * @return void
      */
-    public function permissionGroup()
+    public function group()
     {
-        return $this->belongsTo(PermissionGroup::class,'group','id','permission_groups');
+        return $this->belongsTo(PermissionGroup::class,'group_id','id','permission_groups');
     }
 
     /**
@@ -80,7 +44,7 @@ class Permission extends Model
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class)->where('active',1);
+        return $this->belongsToMany(Role::class);
     }
 
     /*******************************************/
@@ -88,34 +52,68 @@ class Permission extends Model
     /*******************************************/
 
     /**
-     * Get slug in lowercase
+     * Interact with the user's address.
      *
-     * @param  string  $value
-     * @return string
+     * @return  \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    public function getSlugAttribute($value)
+    protected function permission(): Attribute
     {
-        return strtolower($value);
-    }
-
-    /**
-     * Set slug in lowercase
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setSlugAttribute($value)
-    {
-        $this->attributes['slug'] = strtolower($value);
+        return Attribute::make(
+            get: fn ($value) => mb_strtolower($value),
+            set: fn ($value) => mb_strtolower($value)
+        );
     }
 
     public function getTableAttribute()
     {
-        return Str::before($this->slug,'.');
+        return Str::before($this->permission,'.');
     }
 
     /*******************************************/
     /* Methods
+    /*******************************************/
+
+    public function setGroup(String $group)
+    {
+        $model = PermissionGroup::where('group', $group)->first();
+        if ($model != null) $this->group_id = $model->id;
+        return $this;
+    }
+
+    public function assignRole(String $role) : self
+    {
+        $model = Role::where('role', $role)->first();        
+        if ( $model!=null && $this->roles()->where('role_id', $model->id)->first()==null) $this->roles()->attach($model->id);
+        return $this;
+    }
+
+    public function assignRoles(Array $roles) : self
+    {
+        foreach($roles as $role)
+        {
+            $this->assignRole($role);
+        }
+        return $this;   
+    }
+
+    public function revokeRole(String $role) : self
+    {
+        $model = Role::where('role', $role)->first();        
+        if ( $model!=null && $this->roles()->where('role_id', $model->id)->first()!=null) $this->roles()->detach($model->id);
+        return $this;
+    }
+
+    public function revokeRoles(Array $roles) : self
+    {
+        foreach($roles as $role)
+        {
+            $this->revokeRole($role);
+        }
+        return $this;
+    }
+
+    /*******************************************/
+    /* Scopes
     /*******************************************/
 
     public function scopeSearch($query, $search)
@@ -125,36 +123,5 @@ class Permission extends Model
             ->orWhere('description', 'like', '%'.$search.'%' );
     }
 
-    static public function getTables()
-    {
-        $permissions=Permission::active()->get();
-
-        $grouped = $permissions->groupBy(function ($item, $key) {
-            return substr($item['slug'],0, strpos($item['slug'], '.'));
-        });
-
-        return array_keys($grouped->all());
-    }
-
-    static public function getTablesFromCollection($permissions)
-    {
-        $grouped = $permissions->groupBy(function ($item, $key) {
-            return substr($item['slug'],0, strpos($item['slug'], '.'));
-        });
-
-        return array_keys($grouped->all());
-    }
-
-    static public function getGroups()
-    {
-        $permissions=Permission::all();
-
-        $grouped = $permissions->groupBy(function ($item, $key) {
-            return $item->permissionGroup->group;
-        });
-        return array_keys($grouped->all());
-    }
-
-
-
+    
 }

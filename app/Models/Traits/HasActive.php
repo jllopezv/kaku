@@ -31,7 +31,7 @@ trait HasActive
         return $query->where('active', 1);
     }
 
-    public function scopeNonActive($query)
+    public function scopeInactive($query)
     {
         return $query->where('active', 0);
     }

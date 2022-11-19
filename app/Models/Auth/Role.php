@@ -7,9 +7,10 @@ use App\Models\Auth\User;
 use App\Models\Aux\Color;
 use App\Models\Traits\HasOwner;
 use App\Models\Traits\HasActive;
+use App\Models\Traits\HasPermissions;
 use App\Models\Traits\IsAuditable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Role extends Model
 {
@@ -17,87 +18,48 @@ class Role extends Model
     use IsAuditable;
     use HasActive;
 
+    /*******************************************/
+    /* Properties
+    /*******************************************/
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'role', 'level', 'dashboard', 'color_id', 'quota', 'quota_unit', 'unlimited_quota', 'description'
+        'role', 
+        'description',
+        'level', 
+        'dashboard', 
+        'color_id', 
+        'quota', 
+        'quota_unit', 
+        'unlimited_quota', 
+        
     ];
 
-    /**
-     * Control boot events
-     */
-    public static function boot()
-    {
-        parent::boot();
-        static::created(function($model){
-            Cache::forget('role'.$model->id.'.permissions');
-            Cache::forget('roles');
-        });
-
-        static::deleted(function($model){
-            Cache::forget('role'.$model->id.'.permissions');
-            Cache::forget('roles');
-        });
-
-        static::updated(function($model){
-            Cache::forget('role'.$model->id.'.permissions');
-            Cache::forget('roles');
-        });
-
-        static::saved(function($model){
-            Cache::forget('role'.$model->id.'.permissions');
-            Cache::forget('roles');
-        });
-    }
+    protected $casts = [
+        'unlimited_quota' => 'boolean'
+    ];
 
     /*******************************************/
     /* Relationships
     /*******************************************/
 
-    /**
-     * Get Color
-     *
-     * @return void
-     */
     public function color()
     {
         return $this->belongsTo(Color::class);
     }
 
-    /**
-     * Get Permissions
-     */
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class)->where('active',1);
+        return $this->belongsToMany(Permission::class);
     }
 
-    public function permissionsCached()
-    {
-        return Cache::remember('role'.$this->id.'.permissions', 60*60*24, function() {
-            return $this->belongsToMany(Permission::class)->where('active',1)->get();
-        });
-    }
-
-    /**
-     * Get Array of permissions
-     *
-     * @return void
-     */
-    public function permissionsArray()
-    {
-        return $this->belongsToMany(Permission::class)->active()->select('permissions.id')->pluck('id')->toArray();
-    }
-
-    /**
-     * Get Users
-     */
     public function users()
     {
-        return $this->belongsToMany(User::class)->active();
+        return $this->belongsToMany(User::class);
     }
 
     /*******************************************/
@@ -105,30 +67,16 @@ class Role extends Model
     /*******************************************/
 
     /**
-     * Get role in uppercase
+     * Interact with the user's address.
      *
-     * @param  string  $value
-     * @return string
+     * @return  \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    public function getRoleAttribute($value)
+    protected function role(): Attribute
     {
-        return mb_strtoupper($value);
-    }
-
-    /**
-     * Set role in uppercase
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setRoleAttribute($value)
-    {
-        $this->attributes['role'] = mb_strtoupper($value);
-    }
-
-    public function getRoleNameAttribute()
-    {
-        return $this->color->getCustomTag($this->role);
+        return Attribute::make(
+            get: fn ($value) => mb_strtoupper($value),
+            set: fn ($value) => mb_strtoupper($value)
+        );
     }
 
     public function getQuotaStringAttribute($value)
@@ -152,53 +100,59 @@ class Role extends Model
         return 0;
     }
 
-    /*******************************************/
-    /* Abilities
-    /*******************************************/
-
-    public function hasAbility($slug)
+    public function hasQuota()
     {
-        if (auth()->isSuperadmin()) return true;
-        $permission=$this->permissionsCached()->where('slug',$slug)->first();
-        return (($permission && $this->active)?true:false);
+        return !$this->unlimited_quota;
     }
 
     /*******************************************/
     /* Static Methods
     /*******************************************/
 
-    static public function getLevel($role)
-    {
-        $role=Role::where('role',$role)->first();
-        if ($role==null) return null;
-        return $role->level;
-    }
     /*******************************************/
     /* Methods
     /*******************************************/
 
-    public function getRoleName($size='text-base')
+    public function setPermission(String $permission) : self
     {
-        return $this->color->getCustomTag($this->role, $size);
+        $model = Permission::where('permission', $permission)->first();        
+        if ( $model!=null && $this->permissions()->where('permission_id', $model->id)->first()==null) $this->permissions()->attach($model->id);
+        return $this;
     }
 
-    public function getRoleTagAttribute()
+    public function setPermissions(Array $permissions) : self
     {
-        return $this->color->getCustomTag($this->role);
+        foreach($permissions as $permission)
+        {
+            $this->setPermission($permission);
+        }
+        return $this;
     }
 
-    public function getRoleNeutralTagAttribute()
+    public function revokePermission(String $permission) : self
     {
-        return "<span class='px-2 text-base font-bold bg-slate-200 text-slate-600 rounded-lg'>$this->role</span>";
+        $model = Permission::where('permission', $permission)->first();        
+        if ( $model!=null && $this->permissions()->where('permission_id', $model->id)->first()!=null) $this->permissions()->detach($model->id);
+        return $this;
     }
 
+    public function revokePermissions(Array $permissions) : self
+    {
+        foreach($permissions as $permission)
+        {
+            $this->setPermission($permission);
+        }
+        return $this;
+    }
+
+    /*******************************************/
+    /* Scopes
+    /*******************************************/
 
     public function scopeSearch($query, $search)
     {
         return $query->where('role', 'like', '%'.$search.'%' )
             ->orWhere('dashboard', 'like', '%'.$search.'%' );
     }
-
-
 
 }

@@ -19,63 +19,40 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user=new User;
-        $user->username='lop';
-        $user->name='José Luís López';
-        $user->email='jllopezvicente@gmail.com';
-        $user->password=Hash::make('secret');
-        $user->level=1;
-        $user->timezone_id=Timezone::where('name',config('lopsoft.timezone_default'))->first()->id??null;
-        $user->country_id=Country::where('country',config('lopsoft.country_default'))->first()->id??null;
-        $user->language_id=Language::where('code','es')->first()->id??null;
-        $user->dateformat=config('lopsoft.date_format');
-        $user->save();
-        $user->roles()->sync([(Role::where('level',1)->first())->id, (Role::where('level',5)->first())->id]);
 
+        User::create([
+            'username'      =>  'lop',
+            'name'          =>  'José Luís López',
+            'email'         =>  'jllopezvicente@gmail.com',
+            'password'      =>  Hash::make('password'),
+            'level'         =>  1,
+            'timezone_id'   =>  Timezone::where('name',config('lopsoft.timezone_default'))->first()->id??null,
+            'country_id'    =>  Country::where('country',config('lopsoft.country_default'))->first()->id??null,
+            'language_id'   =>  Language::where('code','es')->first()->id??null,
+            'date_format'   =>  config('lopsoft.date_format'),
+        ]);
 
-        $user=new User;
-        $user->username='jose';
-        $user->name='Jose';
-        $user->email='jllopez@gmail.com';
-        $user->password=Hash::make('secret');
-        $user->level=5;
-        $user->timezone_id=Timezone::where('name',config('lopsoft.timezone_default'))->first()->id??null;
-        $user->country_id=Country::where('country',config('lopsoft.country_default'))->first()->id??null;
-        $user->language_id=Language::where('code','es')->first()->id??null;
-        $user->dateformat=config('lopsoft.date_format');
-        $user->save();
-        $user->roles()->sync([  (Role::where('level',5)->first())->id,
-                                (Role::where('level',1000)->first())->id,
-                                (Role::where('level',1002)->first())->id,
-                                (Role::where('level',1003)->first())->id,
-                                (Role::where('level',1004)->first())->id,
-                            ]);
-
-
-        $user=new User;
-        $user->username='condo';
-        $user->name='Condo Admin';
-        $user->email='jlopez@lopsoft.com';
-        $user->password=Hash::make('secret');
-        $user->level=6;
-        $user->timezone_id=Timezone::where('name',config('lopsoft.timezone_default'))->first()->id??null;
-        $user->country_id=Country::where('country',config('lopsoft.country_default'))->first()->id??null;
-        $user->language_id=Language::where('code','es')->first()->id??null;
-        $user->dateformat=config('lopsoft.date_format');
-        $user->save();
-        $user->roles()->sync([  (Role::where('level',2004)->first())->id ]);
-
-
-
+        User::create([
+            'username'      =>  'jose',
+            'name'          =>  'Jose Luis',
+            'email'         =>  'llopez@gmail.com',
+            'password'      =>  Hash::make('password'),
+            'level'         =>  5,
+            'timezone_id'   =>  Timezone::where('name',config('lopsoft.timezone_default'))->first()->id??null,
+            'country_id'    =>  Country::where('country',config('lopsoft.country_default'))->first()->id??null,
+            'language_id'   =>  Language::where('code','es')->first()->id??null,
+            'date_format'   =>  config('lopsoft.date_format'),
+        ]);
+        
         // Factory
 
         $users=User::factory()->count(50)->create();
-        foreach($users as $user)
+        /*foreach($users as $user)
         {
             $user->roles()->sync([
                                 (Role::where('level',1000)->first())->id,
 
                             ]);
-        }
+        }*/
     }
 }
