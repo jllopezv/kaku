@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
     public function run()
     {
 
-        User::create([
+        $superadmin = User::create([
             'username'      =>  'lop',
             'name'          =>  'José Luís López',
             'email'         =>  'jllopezvicente@gmail.com',
@@ -32,7 +32,9 @@ class UserSeeder extends Seeder
             'date_format'   =>  config('lopsoft.date_format'),
         ]);
 
-        User::create([
+        $superadmin->assignRole('superadmin');
+
+        $admin = User::create([
             'username'      =>  'jose',
             'name'          =>  'Jose Luis',
             'email'         =>  'llopez@gmail.com',
@@ -43,6 +45,10 @@ class UserSeeder extends Seeder
             'language_id'   =>  Language::where('code','es')->first()->id??null,
             'date_format'   =>  config('lopsoft.date_format'),
         ]);
+
+        $admin->assignRole('admin');
+        $admin->assignRole('user');
+
         
         // Factory
 

@@ -103,11 +103,19 @@ class User extends Authenticatable
         return Cache::get('user-is-online-'.$this->id);
     }
 
+    public function getMainRoleAttribute()
+    {
+        return $this->roles()->orderBy('level','asc')->first();
+    }
+
+    public function getDashboardAttribute()
+    {
+        return $this->mainRole->dashboard;
+    }
+
     /*********************************************/
     /* Methods
     /*********************************************/
-
-    
 
     public function isAdmin() : bool
     {

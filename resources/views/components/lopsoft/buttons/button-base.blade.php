@@ -10,7 +10,7 @@
     'stretch'       => false,
 ])
 
-<div class="{{ $stretch?'':'p-1' }} text-base">
+<div class=" text-base">
     @if($link)
         <a href="{{ $link }}">
     @endif

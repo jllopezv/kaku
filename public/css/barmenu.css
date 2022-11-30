@@ -1,0 +1,45 @@
+/* MENUS PRINCIPALES */
+
+.barmenu
+{
+    background-color: white;
+    color: #f85b5b;
+    height: 0px;
+    -webkit-transition: all 0.5s ease; 
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.barmenu.barmenu-open
+{
+    background-color: white;
+    color: #f85b5b;
+    height: 275px;
+    overflow-y: scroll;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.barmenuitem
+{
+    background-color: white;
+    color: #f85b5b;    
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.barmenuitem.barmenuitem-show
+{
+    background-color: white;
+    color: #f85b5b;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
